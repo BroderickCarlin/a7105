@@ -1,0 +1,25 @@
+[package]
+authors = [ "Broderick Carlin" ]
+categories = [
+  "embedded",
+  "no-std",
+  "hardware-support"
+]
+description = "Rust embedded-hal driver for the A7105 2.4GHz FSK/GFSK Transceiver"
+edition = "2021"
+keywords = [ "a7105", "2.4ghz", "gfsk", "afhds" ]
+license = "Apache-2.0"
+name = "a7105"
+readme = "README.md"
+repository = "https://github.com/BroderickCarlin/a7105"
+version = "0.1.0"
+
+[dependencies]
+defmt = "0.3"
+embedded-hal = { version = "1.0.0-rc.1", optional = true }
+embedded-hal-async = { version = "1.0.0-rc.1", optional = true }
+
+[features]
+default = ["async"]
+async = ["embedded-hal-async"] 
+blocking = ["embedded-hal"]
