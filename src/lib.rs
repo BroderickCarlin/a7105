@@ -7,6 +7,8 @@ use registers::{ReadableRegister, WritableRegister};
 pub mod commands;
 pub mod registers;
 
+const READ_FLAG: u8 = 0x40;
+
 pub struct A7105<SPI> {
     spi: SPI,
 }
@@ -28,8 +30,10 @@ impl<SPI: embedded_hal::spi::SpiDevice> A7105<SPI> {
     /// Reads a value from a regsiter, determined by the specified return type.
     pub fn read_reg<const N: usize, R: ReadableRegister<N>>(&mut self) -> Result<R, SPI::Error> {
         let mut buf = [0u8; N];
-        self.spi
-            .transaction(&mut [Operation::Write(&[R::id()]), Operation::Read(&mut buf)])?;
+        self.spi.transaction(&mut [
+            Operation::Write(&[R::id() | READ_FLAG]),
+            Operation::Read(&mut buf),
+        ])?;
         Ok(R::from_slice(buf))
     }
 
@@ -65,7 +69,10 @@ impl<SPI: embedded_hal_async::spi::SpiDevice> A7105<SPI> {
     ) -> Result<R, SPI::Error> {
         let mut buf = [0u8; N];
         self.spi
-            .transaction(&mut [Operation::Write(&[R::id()]), Operation::Read(&mut buf)])
+            .transaction(&mut [
+                Operation::Write(&[R::id() | READ_FLAG]),
+                Operation::Read(&mut buf),
+            ])
             .await?;
         Ok(R::from_slice(buf))
     }
