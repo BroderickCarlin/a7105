@@ -1,9 +1,13 @@
+use defmt::Format;
+
+#[derive(Format, PartialEq, Debug, Copy, Clone)]
 pub enum Command {
     Reset,
     ResetFifoWritePointer,
     ResetFifoReadPointer,
 }
 
+#[derive(Format, PartialEq, Debug, Copy, Clone)]
 pub enum Mode {
     Sleep,
     Idle,

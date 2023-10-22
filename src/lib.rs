@@ -2,9 +2,11 @@
 
 use commands::{Command, Mode};
 use embedded_hal_async::spi::Operation;
+pub use error::*;
 use registers::{ReadableRegister, WritableRegister};
 
 pub mod commands;
+mod error;
 pub mod registers;
 
 const READ_FLAG: u8 = 0x40;
@@ -14,6 +16,9 @@ pub struct A7105<SPI> {
 }
 
 impl<SPI> A7105<SPI> {
+    const RX_BUFFER_ID: u8 = 0x05;
+    const TX_BUFFER_ID: u8 = 0x05;
+
     /// Constructs a new instance of a [`A7105`] from the provided [`SpiDevice`](embedded_hal::spi::SpiDevice)
     pub fn new(spi: SPI) -> Self {
         Self { spi }
@@ -59,6 +64,33 @@ impl<SPI: embedded_hal::spi::SpiDevice> A7105<SPI> {
         };
         self.spi.write(buf)
     }
+
+    /// Attempts to read a recieved packet from the A7105's internal RX buffer
+    pub fn rx_packet(&mut self, buf: &mut [u8]) -> Result<(), ReadPacketError<SPI::Error>> {
+        // Start by verifying that the packet we received is actaully valid
+        let mode: registers::Mode = self.read_reg()?;
+        if !mode.crc_pass || !mode.fec_pass {
+            // The packet we got was invalid, so there isn't anything to read
+            return Err(ReadPacketError::PacketError(mode.into()));
+        }
+
+        // The packet was valid so reset the read pointer and do the actual read
+        self.command(Command::ResetFifoReadPointer)?;
+        self.spi.transaction(&mut [
+            Operation::Write(&[Self::RX_BUFFER_ID | READ_FLAG]),
+            Operation::Read(buf),
+        ])?;
+        Ok(())
+    }
+
+    /// Attempts to write a packet to the A7105's internal TX buffer
+    pub fn tx_packet(&mut self, buf: &[u8]) -> Result<(), SPI::Error> {
+        self.command(Command::ResetFifoWritePointer)?;
+        self.spi.transaction(&mut [
+            Operation::Write(&[Self::TX_BUFFER_ID]),
+            Operation::Write(buf),
+        ])
+    }
 }
 
 #[cfg(feature = "async")]
@@ -100,5 +132,36 @@ impl<SPI: embedded_hal_async::spi::SpiDevice> A7105<SPI> {
             Command::ResetFifoWritePointer => &[0b1110_0000],
         };
         self.spi.write(buf).await
+    }
+
+    /// Attempts to read a recieved packet from the A7105's internal RX buffer
+    pub async fn rx_packet(&mut self, buf: &mut [u8]) -> Result<(), ReadPacketError<SPI::Error>> {
+        // Start by verifying that the packet we received is actaully valid
+        let mode: registers::Mode = self.read_reg().await?;
+        if !mode.crc_pass || !mode.fec_pass {
+            // The packet we got was invalid, so there isn't anything to read
+            return Err(ReadPacketError::PacketError(mode.into()));
+        }
+
+        // The packet was valid so reset the read pointer and do the actual read
+        self.command(Command::ResetFifoReadPointer).await?;
+        self.spi
+            .transaction(&mut [
+                Operation::Write(&[Self::RX_BUFFER_ID | READ_FLAG]),
+                Operation::Read(buf),
+            ])
+            .await?;
+        Ok(())
+    }
+
+    /// Attempts to write a packet to the A7105's internal TX buffer
+    pub async fn tx_packet(&mut self, buf: &[u8]) -> Result<(), SPI::Error> {
+        self.command(Command::ResetFifoWritePointer).await?;
+        self.spi
+            .transaction(&mut [
+                Operation::Write(&[Self::TX_BUFFER_ID]),
+                Operation::Write(buf),
+            ])
+            .await
     }
 }
