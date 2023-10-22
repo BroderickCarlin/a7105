@@ -9,8 +9,6 @@ pub mod commands;
 mod error;
 pub mod registers;
 
-const READ_FLAG: u8 = 0x40;
-
 pub struct A7105<SPI> {
     spi: SPI,
 }
@@ -18,6 +16,7 @@ pub struct A7105<SPI> {
 impl<SPI> A7105<SPI> {
     const RX_BUFFER_ID: u8 = 0x05;
     const TX_BUFFER_ID: u8 = 0x05;
+    const READ_FLAG: u8 = 0x40;
 
     /// Constructs a new instance of a [`A7105`] from the provided [`SpiDevice`](embedded_hal::spi::SpiDevice)
     pub fn new(spi: SPI) -> Self {
@@ -102,7 +101,7 @@ impl<SPI: embedded_hal_async::spi::SpiDevice> A7105<SPI> {
         let mut buf = [0u8; N];
         self.spi
             .transaction(&mut [
-                Operation::Write(&[R::id() | READ_FLAG]),
+                Operation::Write(&[R::id() | Self::READ_FLAG]),
                 Operation::Read(&mut buf),
             ])
             .await?;
@@ -147,7 +146,7 @@ impl<SPI: embedded_hal_async::spi::SpiDevice> A7105<SPI> {
         self.command(Command::ResetFifoReadPointer).await?;
         self.spi
             .transaction(&mut [
-                Operation::Write(&[Self::RX_BUFFER_ID | READ_FLAG]),
+                Operation::Write(&[Self::RX_BUFFER_ID | Self::READ_FLAG]),
                 Operation::Read(buf),
             ])
             .await?;
