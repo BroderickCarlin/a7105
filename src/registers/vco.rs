@@ -21,11 +21,11 @@ impl Register for VcoCurrentCalibration {
 
 impl WritableRegister for VcoCurrentCalibration {}
 
-impl Into<u8> for VcoCurrentCalibration {
-    fn into(self) -> u8 {
-        match self {
-            Self::Automatic => 0,
-            Self::Manual(val) => (val & 0b1111) | 0b1_0000,
+impl From<VcoCurrentCalibration> for u8 {
+    fn from(val: VcoCurrentCalibration) -> u8 {
+        match val {
+            VcoCurrentCalibration::Automatic => 0,
+            VcoCurrentCalibration::Manual(val) => (val & 0b1111) | 0b1_0000,
         }
     }
 }
@@ -68,11 +68,11 @@ impl Register for VcoSingleBandCalibration1 {
 
 impl WritableRegister for VcoSingleBandCalibration1 {}
 
-impl Into<u8> for VcoSingleBandCalibration1 {
-    fn into(self) -> u8 {
-        match self {
-            Self::Automatic => 0,
-            Self::Manual(val) => (val & 0b111) | 0b1000,
+impl From<VcoSingleBandCalibration1> for u8 {
+    fn from(val: VcoSingleBandCalibration1) -> u8 {
+        match val {
+            VcoSingleBandCalibration1::Automatic => 0,
+            VcoSingleBandCalibration1::Manual(val) => (val & 0b111) | 0b1000,
         }
     }
 }
@@ -174,9 +174,9 @@ impl Register for VcoSingleBandCalibration2 {
 
 impl WritableRegister for VcoSingleBandCalibration2 {}
 
-impl Into<u8> for VcoSingleBandCalibration2 {
-    fn into(self) -> u8 {
-        (match self.voltage_upper_threshold {
+impl From<VcoSingleBandCalibration2> for u8 {
+    fn from(val: VcoSingleBandCalibration2) -> u8 {
+        (match val.voltage_upper_threshold {
             TuningVoltageUpperThreshold::V06 => 0b000,
             TuningVoltageUpperThreshold::V07 => 0b001,
             TuningVoltageUpperThreshold::V08 => 0b010,
@@ -186,7 +186,7 @@ impl Into<u8> for VcoSingleBandCalibration2 {
             TuningVoltageUpperThreshold::V12 => 0b110,
             TuningVoltageUpperThreshold::V13 => 0b111,
         } << 3)
-            | match self.voltage_lower_threshold {
+            | match val.voltage_lower_threshold {
                 TuningVoltageLowerThreshold::V01 => 0b000,
                 TuningVoltageLowerThreshold::V02 => 0b001,
                 TuningVoltageLowerThreshold::V03 => 0b010,

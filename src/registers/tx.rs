@@ -38,13 +38,13 @@ impl Register for Tx1 {
 
 impl WritableRegister for Tx1 {}
 
-impl Into<u8> for Tx1 {
-    fn into(self) -> u8 {
-        u8::from(self.data_invert) << 5
-            | u8::from(self.modulation_enable) << 4
-            | u8::from(self.filter_enable) << 3
-            | self.fdp.min(0b111)
-            | match self.moving_average {
+impl From<Tx1> for u8 {
+    fn from(val: Tx1) -> u8 {
+        u8::from(val.data_invert) << 5
+            | u8::from(val.modulation_enable) << 4
+            | u8::from(val.filter_enable) << 3
+            | val.fdp.min(0b111)
+            | match val.moving_average {
                 None => 0b00,
                 Some(MovingAverage::TwoBit) => 0b01,
                 Some(MovingAverage::FourBit) => 0b10,
@@ -73,9 +73,9 @@ impl Register for Tx2 {
 
 impl WritableRegister for Tx2 {}
 
-impl Into<u8> for Tx2 {
-    fn into(self) -> u8 {
-        self.fd.min(0b11111) | 0b0010_0000
+impl From<Tx2> for u8 {
+    fn from(val: Tx2) -> u8 {
+        val.fd.min(0b11111) | 0b0010_0000
     }
 }
 

@@ -34,17 +34,17 @@ impl Register for Rx {
 
 impl WritableRegister for Rx {}
 
-impl Into<u8> for Rx {
-    fn into(self) -> u8 {
+impl From<Rx> for u8 {
+    fn from(val: Rx) -> u8 {
         // The datasheet lists both 0b0100_0000 and 0b0110_0000 as the defaults we should use
         0b0100_0000
-            | u8::from(self.freq_compensation_enable) << 4
-            | u8::from(self.data_invert) << 3
-            | match self.bandwidth {
+            | u8::from(val.freq_compensation_enable) << 4
+            | u8::from(val.data_invert) << 3
+            | match val.bandwidth {
                 Bandwidth::Khz250 => 0b0,
                 Bandwidth::Khz500 => 0b1,
             } << 1
-            | u8::from(self.lowside_band_select)
+            | u8::from(val.lowside_band_select)
     }
 }
 
@@ -91,16 +91,16 @@ impl Register for RxGain1 {
 impl WritableRegister for RxGain1 {}
 impl ReadableRegister for RxGain1 {}
 
-impl Into<u8> for RxGain1 {
-    fn into(self) -> u8 {
-        u8::from(self.manual_vga_calibration) << 7
-            | match self.mixer_gain {
+impl From<RxGain1> for u8 {
+    fn from(val: RxGain1) -> u8 {
+        u8::from(val.manual_vga_calibration) << 7
+            | match val.mixer_gain {
                 MixerGain::Db24 => 0b00,
                 MixerGain::Db18 => 0b01,
                 MixerGain::Db12 => 0b10,
                 MixerGain::Db6 => 0b11,
             } << 3
-            | match self.lna_gain {
+            | match val.lna_gain {
                 LnaGain::Db24 => 0b000,
                 LnaGain::Db18 => 0b001,
                 LnaGain::Db12 => 0b010,

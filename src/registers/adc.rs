@@ -41,21 +41,21 @@ impl Register for AdcControl {
 
 impl WritableRegister for AdcControl {}
 
-impl Into<u8> for AdcControl {
-    fn into(self) -> u8 {
+impl From<AdcControl> for u8 {
+    fn from(val: AdcControl) -> Self {
         0b0000_0010
-            | match self.margin {
+            | match val.margin {
                 RssiMargin::Five => 0b0000_0000,
                 RssiMargin::Ten => 0b0100_0000,
                 RssiMargin::Fifteen => 0b1000_0000,
                 RssiMargin::Twenty => 0b1100_0000,
             }
-            | if self.rssi_end_early { 0b0010_0000 } else { 0 }
-            | match self.adc_clock_speed {
+            | if val.rssi_end_early { 0b0010_0000 } else { 0 }
+            | match val.adc_clock_speed {
                 AdcClockSpeed::Mhz4 => 0b0000_0000,
                 AdcClockSpeed::Mhz8 => 0b0001_0000,
             }
-            | match self.capture_mode {
+            | match val.capture_mode {
                 AdcCaptureMode::Single => 0b0000_0000,
                 AdcCaptureMode::Continuous => 0b0000_0001,
             }

@@ -1,15 +1,9 @@
 use super::*;
 use defmt::Format;
 
-#[derive(Format, PartialEq, Debug, Copy, Clone)]
+#[derive(Format, PartialEq, Debug, Copy, Clone, Default)]
 pub struct Pll1 {
     pub channel: u8,
-}
-
-impl Default for Pll1 {
-    fn default() -> Self {
-        Self { channel: 0 }
-    }
 }
 
 impl Register for Pll1 {
@@ -27,9 +21,9 @@ impl From<u8> for Pll1 {
     }
 }
 
-impl Into<u8> for Pll1 {
-    fn into(self) -> u8 {
-        self.channel
+impl From<Pll1> for u8 {
+    fn from(val: Pll1) -> u8 {
+        val.channel
     }
 }
 
@@ -73,12 +67,12 @@ impl From<u8> for Pll2 {
     }
 }
 
-impl Into<u8> for Pll2 {
-    fn into(self) -> u8 {
-        u8::from(self.crystal_freq_doubler) << 7
-            | self.rf_pll_ref_counter.min(0b11) << 5
-            | self.pll_chn_step.min(0b1111) << 1
-            | u8::from(self.ip8)
+impl From<Pll2> for u8 {
+    fn from(val: Pll2) -> u8 {
+        u8::from(val.crystal_freq_doubler) << 7
+            | val.rf_pll_ref_counter.min(0b11) << 5
+            | val.pll_chn_step.min(0b1111) << 1
+            | u8::from(val.ip8)
     }
 }
 
@@ -108,21 +102,15 @@ impl From<u8> for Pll3 {
     }
 }
 
-impl Into<u8> for Pll3 {
-    fn into(self) -> u8 {
-        self.bip
+impl From<Pll3> for u8 {
+    fn from(val: Pll3) -> u8 {
+        val.bip
     }
 }
 
-#[derive(Format, PartialEq, Debug, Copy, Clone)]
+#[derive(Format, PartialEq, Debug, Copy, Clone, Default)]
 pub struct Pll4 {
     pub bfp: u8,
-}
-
-impl Default for Pll4 {
-    fn default() -> Self {
-        Self { bfp: 0x0 }
-    }
 }
 
 impl Register for Pll4 {
@@ -140,9 +128,9 @@ impl From<u8> for Pll4 {
     }
 }
 
-impl Into<u8> for Pll4 {
-    fn into(self) -> u8 {
-        self.bfp
+impl From<Pll4> for u8 {
+    fn from(val: Pll4) -> u8 {
+        val.bfp
     }
 }
 
@@ -173,9 +161,9 @@ impl From<u8> for Pll5 {
     }
 }
 
-impl Into<u8> for Pll5 {
-    fn into(self) -> u8 {
-        self.bfp
+impl From<Pll5> for u8 {
+    fn from(val: Pll5) -> u8 {
+        val.bfp
     }
 }
 

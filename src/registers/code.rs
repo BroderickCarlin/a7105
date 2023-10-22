@@ -34,20 +34,20 @@ impl Register for Code1 {
 
 impl WritableRegister for Code1 {}
 
-impl Into<u8> for Code1 {
-    fn into(self) -> u8 {
-        0 | if self.data_whitening_enabled {
+impl From<Code1> for u8 {
+    fn from(val: Code1) -> u8 {
+        (if val.data_whitening_enabled {
             0b0010_0000
         } else {
             0
-        } | if self.fec_enabled { 0b0001_0000 } else { 0 }
-            | if self.crc_enabled { 0b0000_1000 } else { 0 }
-            | if self.id_length == IdLength::Four {
+        }) | if val.fec_enabled { 0b0001_0000 } else { 0 }
+            | if val.crc_enabled { 0b0000_1000 } else { 0 }
+            | if val.id_length == IdLength::Four {
                 0b0000_0100
             } else {
                 0
             }
-            | match self.preable_length {
+            | match val.preable_length {
                 PreambleLength::One => 0,
                 PreambleLength::Two => 0b01,
                 PreambleLength::Three => 0b10,
@@ -99,16 +99,16 @@ impl Register for Code2 {
 
 impl WritableRegister for Code2 {}
 
-impl Into<u8> for Code2 {
-    fn into(self) -> u8 {
-        (self.demodulator_dc_estimation_average_mode & 0b111) << 4
-            | match self.id_error_code_tolerance {
+impl From<Code2> for u8 {
+    fn from(val: Code2) -> u8 {
+        (val.demodulator_dc_estimation_average_mode & 0b111) << 4
+            | match val.id_error_code_tolerance {
                 IdErrorCodeTolerance::Bits0 => 0,
                 IdErrorCodeTolerance::Bits1 => 0b0100,
                 IdErrorCodeTolerance::Bits2 => 0b1000,
                 IdErrorCodeTolerance::Bits3 => 0b1100,
             }
-            | match self.preamble_pattern_detection_length {
+            | match val.preamble_pattern_detection_length {
                 PreabmelPatternDetectionLength::Bits0 => 0,
                 PreabmelPatternDetectionLength::Bits4 => 0b01,
                 PreabmelPatternDetectionLength::Bits8 => 0b10,
@@ -138,9 +138,9 @@ impl Register for Code3 {
     }
 }
 
-impl Into<u8> for Code3 {
-    fn into(self) -> u8 {
-        self.encryption_key & 0b0111_1111
+impl From<Code3> for u8 {
+    fn from(val: Code3) -> u8 {
+        val.encryption_key & 0b0111_1111
     }
 }
 

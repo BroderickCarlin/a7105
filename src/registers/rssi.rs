@@ -22,9 +22,9 @@ impl Register for RssiCarrierDetectThreshold {
 
 impl WritableRegister for RssiCarrierDetectThreshold {}
 
-impl Into<u8> for RssiCarrierDetectThreshold {
-    fn into(self) -> u8 {
-        self.threshold
+impl From<RssiCarrierDetectThreshold> for u8 {
+    fn from(val: RssiCarrierDetectThreshold) -> u8 {
+        val.threshold
     }
 }
 

@@ -25,9 +25,9 @@ impl Register for RcOsc3 {
 
 impl WritableRegister for RcOsc3 {}
 
-impl Into<u8> for RcOsc3 {
-    fn into(self) -> u8 {
-        match self.clock_select {
+impl From<RcOsc3> for u8 {
+    fn from(val: RcOsc3) -> u8 {
+        match val.clock_select {
             ClockSelect::FSyncDiv8 => 0b0000_0101,
             ClockSelect::FSyncDiv16 => 0b0100_0101,
             ClockSelect::FSyncDiv32 => 0b1000_0101,

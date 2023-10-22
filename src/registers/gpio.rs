@@ -20,9 +20,9 @@ pub enum GpioPinFunction {
     ExternalFsyncInput,
 }
 
-impl Into<u8> for GpioPinFunction {
-    fn into(self) -> u8 {
-        match self {
+impl From<GpioPinFunction> for u8 {
+    fn from(val: GpioPinFunction) -> u8 {
+        match val {
             GpioPinFunction::Wtr => 0b0000_0000,
             GpioPinFunction::EoacOrFsync => 0b0000_0100,
             GpioPinFunction::TmeoOrCd => 0b0000_1000,
@@ -64,11 +64,11 @@ impl Register for Gpio1PinControl {
 
 impl WritableRegister for Gpio1PinControl {}
 
-impl Into<u8> for Gpio1PinControl {
-    fn into(self) -> u8 {
-        Into::<u8>::into(self.pin_function)
-            | u8::from(self.invert_output) << 1
-            | u8::from(self.output_enabled)
+impl From<Gpio1PinControl> for u8 {
+    fn from(val: Gpio1PinControl) -> u8 {
+        Into::<u8>::into(val.pin_function)
+            | u8::from(val.invert_output) << 1
+            | u8::from(val.output_enabled)
     }
 }
 
@@ -97,11 +97,11 @@ impl Register for Gpio2PinControl {
 
 impl WritableRegister for Gpio2PinControl {}
 
-impl Into<u8> for Gpio2PinControl {
-    fn into(self) -> u8 {
-        Into::<u8>::into(self.pin_function)
-            | u8::from(self.invert_output) << 1
-            | u8::from(self.output_enabled)
+impl From<Gpio2PinControl> for u8 {
+    fn from(val: Gpio2PinControl) -> u8 {
+        Into::<u8>::into(val.pin_function)
+            | u8::from(val.invert_output) << 1
+            | u8::from(val.output_enabled)
     }
 }
 

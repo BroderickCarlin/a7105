@@ -21,9 +21,9 @@ impl From<u8> for DataRate {
     }
 }
 
-impl Into<u8> for DataRate {
-    fn into(self) -> u8 {
-        self.rate
+impl From<DataRate> for u8 {
+    fn from(val: DataRate) -> u8 {
+        val.rate
     }
 }
 

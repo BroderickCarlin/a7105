@@ -40,15 +40,15 @@ impl Register for Delay1 {
 
 impl WritableRegister for Delay1 {}
 
-impl Into<u8> for Delay1 {
-    fn into(self) -> u8 {
-        (match self.wpl_to_tx {
+impl From<Delay1> for u8 {
+    fn from(val: Delay1) -> u8 {
+        (match val.wpl_to_tx {
             WpllToTx::Us20 => 0b00,
             WpllToTx::Us40 => 0b01,
             WpllToTx::Us60 => 0b10,
             WpllToTx::Us80 => 0b11,
         } << 3)
-            | match self.pll_to_wpll {
+            | match val.pll_to_wpll {
                 PllToWpll::Us50 => 0b001,
                 PllToWpll::Us70 => 0b010,
                 PllToWpll::Us90 => 0b011,
@@ -115,9 +115,9 @@ impl Register for Delay2 {
 
 impl WritableRegister for Delay2 {}
 
-impl Into<u8> for Delay2 {
-    fn into(self) -> u8 {
-        (match self.xtal_settling_delay {
+impl From<Delay2> for u8 {
+    fn from(val: Delay2) -> u8 {
+        (match val.xtal_settling_delay {
             XtalSettlingDelay::Us200 => 0b000,
             XtalSettlingDelay::Us400 => 0b001,
             XtalSettlingDelay::Us600 => 0b010,
@@ -127,13 +127,13 @@ impl Into<u8> for Delay2 {
             XtalSettlingDelay::Us2000 => 0b110,
             XtalSettlingDelay::Us2500 => 0b111,
         } << 5)
-            | match self.agc_delay_settling {
+            | match val.agc_delay_settling {
                 AgcDelaySettling::Us10 => 0b00,
                 AgcDelaySettling::Us20 => 0b01,
                 AgcDelaySettling::Us30 => 0b10,
                 AgcDelaySettling::Us40 => 0b11,
             } << 3
-            | match self.rssi_measurement_delay {
+            | match val.rssi_measurement_delay {
                 RssiMeasurementDelay::Us10 => 0b000,
                 RssiMeasurementDelay::Us20 => 0b001,
                 RssiMeasurementDelay::Us30 => 0b010,

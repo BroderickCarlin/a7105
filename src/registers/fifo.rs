@@ -23,9 +23,9 @@ impl Register for Fifo1 {
 
 impl WritableRegister for Fifo1 {}
 
-impl Into<u8> for Fifo1 {
-    fn into(self) -> u8 {
-        self.end_pointer
+impl From<Fifo1> for u8 {
+    fn from(val: Fifo1) -> u8 {
+        val.end_pointer
     }
 }
 
@@ -54,9 +54,9 @@ impl Register for Fifo2 {
 
 impl WritableRegister for Fifo2 {}
 
-impl Into<u8> for Fifo2 {
-    fn into(self) -> u8 {
-        (self.segment & 0b0011_1111) | (self.margin << 6)
+impl From<Fifo2> for u8 {
+    fn from(val: Fifo2) -> u8 {
+        (val.segment & 0b0011_1111) | (val.margin << 6)
     }
 }
 

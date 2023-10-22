@@ -21,9 +21,9 @@ impl From<u32> for IdData {
     }
 }
 
-impl Into<u32> for IdData {
-    fn into(self) -> u32 {
-        self.id
+impl From<IdData> for u32 {
+    fn from(val: IdData) -> u32 {
+        val.id
     }
 }
 

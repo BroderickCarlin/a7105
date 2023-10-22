@@ -63,8 +63,8 @@ impl Register for Reset {
 
 impl WritableRegister for Reset {}
 
-impl Into<u8> for Reset {
-    fn into(self) -> u8 {
+impl From<Reset> for u8 {
+    fn from(_: Reset) -> u8 {
         0
     }
 }
@@ -139,14 +139,14 @@ impl From<u8> for ModeControl {
     }
 }
 
-impl Into<u8> for ModeControl {
-    fn into(self) -> u8 {
-        u8::from(self.direct_data_pin_output == DirectDataPin::SDIO) << 7
-            | u8::from(self.auto_rssi) << 6
-            | u8::from(self.auto_if) << 5
-            | u8::from(self.cd_filter) << 4
-            | u8::from(self.data_mode == DataMode::FIFO) << 1
-            | u8::from(self.adc_measurement_enabled)
+impl From<ModeControl> for u8 {
+    fn from(val: ModeControl) -> u8 {
+        u8::from(val.direct_data_pin_output == DirectDataPin::SDIO) << 7
+            | u8::from(val.auto_rssi) << 6
+            | u8::from(val.auto_if) << 5
+            | u8::from(val.cd_filter) << 4
+            | u8::from(val.data_mode == DataMode::FIFO) << 1
+            | u8::from(val.adc_measurement_enabled)
     }
 }
 

@@ -21,10 +21,10 @@ impl Register for BatteryDetectConfig {
 
 impl WritableRegister for BatteryDetectConfig {}
 
-impl Into<u8> for BatteryDetectConfig {
-    fn into(self) -> u8 {
-        u8::from(self.detect_enabled)
-            | match self.detect_threshold {
+impl From<BatteryDetectConfig> for u8 {
+    fn from(val: BatteryDetectConfig) -> Self {
+        u8::from(val.detect_enabled)
+            | match val.detect_threshold {
                 DetectThreshold::V20 => 0b000,
                 DetectThreshold::V21 => 0b001,
                 DetectThreshold::V22 => 0b010,
@@ -34,13 +34,13 @@ impl Into<u8> for BatteryDetectConfig {
                 DetectThreshold::V26 => 0b110,
                 DetectThreshold::V27 => 0b111,
             } << 1
-            | match self.nonsleep_voltage_setting {
+            | match val.nonsleep_voltage_setting {
                 NonSleepModeVoltageSetting::V18 => 0b11,
                 NonSleepModeVoltageSetting::V19 => 0b10,
                 NonSleepModeVoltageSetting::V20 => 0b01,
                 NonSleepModeVoltageSetting::V21 => 0b00,
             } << 5
-            | match self.sleep_voltage_setting {
+            | match val.sleep_voltage_setting {
                 SleepModeVoltageSetting::ThreeFifth => 0b0,
                 SleepModeVoltageSetting::ThreeForths => 0b1,
             } << 7

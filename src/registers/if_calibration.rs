@@ -15,9 +15,9 @@ impl Register for IfCalibration1Config {
 
 impl WritableRegister for IfCalibration1Config {}
 
-impl Into<u8> for IfCalibration1Config {
-    fn into(self) -> u8 {
-        if let Some(val) = self.calibration_value {
+impl From<IfCalibration1Config> for u8 {
+    fn from(cfg: IfCalibration1Config) -> u8 {
+        if let Some(val) = cfg.calibration_value {
             0b0001_0000 | (val & 0b1111)
         } else {
             0b0000_0000

@@ -41,10 +41,10 @@ impl Register for CkoPinControl {
 
 impl WritableRegister for CkoPinControl {}
 
-impl Into<u8> for CkoPinControl {
-    fn into(self) -> u8 {
-        u8::from(self.external_clock_output_enabled) << 7
-            | match self.pin_output_mode {
+impl From<CkoPinControl> for u8 {
+    fn from(val: CkoPinControl) -> Self {
+        u8::from(val.external_clock_output_enabled) << 7
+            | match val.pin_output_mode {
                 PinOutputMode::DckInTxRckInRx => 0b0000_0000,
                 PinOutputMode::FifoPointerFlag => 0b0001_0000,
                 PinOutputMode::Fsync => 0b0010_0000,
@@ -52,9 +52,9 @@ impl Into<u8> for CkoPinControl {
                 PinOutputMode::FsyncDiv4 => 0b0011_0000,
                 PinOutputMode::FsyncDiv8 => 0b0011_1000,
             }
-            | u8::from(self.invert_output) << 2
-            | u8::from(self.output_enabled) << 1
-            | u8::from(self.invert_spi_clk_input)
+            | u8::from(val.invert_output) << 2
+            | u8::from(val.output_enabled) << 1
+            | u8::from(val.invert_spi_clk_input)
     }
 }
 

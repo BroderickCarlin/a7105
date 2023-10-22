@@ -17,9 +17,9 @@ pub enum Mode {
     Tx,
 }
 
-impl Into<u8> for Mode {
-    fn into(self) -> u8 {
-        match self {
+impl From<Mode> for u8 {
+    fn from(val: Mode) -> Self {
+        match val {
             Mode::Sleep => 0b1000_0000,
             Mode::Idle => 0b1001_0000,
             Mode::Standby => 0b1010_0000,

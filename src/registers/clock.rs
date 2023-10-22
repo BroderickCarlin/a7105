@@ -8,9 +8,9 @@ pub enum SystemClockDiv {
     Div4,
 }
 
-impl Into<u8> for SystemClockDiv {
-    fn into(self) -> u8 {
-        match self {
+impl From<SystemClockDiv> for u8 {
+    fn from(val: SystemClockDiv) -> Self {
+        match val {
             SystemClockDiv::Div1 => 0b00,
             SystemClockDiv::Div2 => 0b01,
             SystemClockDiv::Div4 => 0b10,
@@ -61,12 +61,12 @@ impl From<u8> for Clock {
     }
 }
 
-impl Into<u8> for Clock {
-    fn into(self) -> u8 {
-        u8::from(self.clock_generated_enabled) << 1
-            | u8::from(self.external_crystal_osc)
-            | self.clock_generation_ref_cnt.min(0b1111) << 4
-            | Into::<u8>::into(self.sys_clock_div) << 2
+impl From<Clock> for u8 {
+    fn from(val: Clock) -> u8 {
+        u8::from(val.clock_generated_enabled) << 1
+            | u8::from(val.external_crystal_osc)
+            | val.clock_generation_ref_cnt.min(0b1111) << 4
+            | Into::<u8>::into(val.sys_clock_div) << 2
     }
 }
 

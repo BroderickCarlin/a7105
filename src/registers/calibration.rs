@@ -30,11 +30,11 @@ impl From<u8> for CalibrationControl {
     }
 }
 
-impl Into<u8> for CalibrationControl {
-    fn into(self) -> u8 {
-        u8::from(self.vco_current_calibration_enabled) << 2
-            | u8::from(self.vco_bank_calibration_enabled) << 1
-            | u8::from(self.if_filter_bank_calibration_enabled)
+impl From<CalibrationControl> for u8 {
+    fn from(val: CalibrationControl) -> Self {
+        u8::from(val.vco_current_calibration_enabled) << 2
+            | u8::from(val.vco_bank_calibration_enabled) << 1
+            | u8::from(val.if_filter_bank_calibration_enabled)
     }
 }
 
