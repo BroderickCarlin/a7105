@@ -23,6 +23,3 @@ embedded-hal-async = { version = "1.0.0-rc.1", optional = true }
 default = ["async"]
 async = ["embedded-hal-async"] 
 blocking = ["embedded-hal"]
-
-
-# just testing
