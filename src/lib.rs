@@ -145,8 +145,8 @@ impl<SPI: embedded_hal_async::spi::SpiDevice> A7105<SPI> {
         self.command(Command::ResetFifoReadPointer).await?;
         self.spi
             .transaction(&mut [
-                Operation::Write(&[Self::RX_BUFFER_ID | Self::READ_FLAG]),
-                Operation::Read(buf),
+                embedded_hal_async::spi::Operation::Write(&[Self::RX_BUFFER_ID | Self::READ_FLAG]),
+                embedded_hal_async::spi::Operation::Read(buf),
             ])
             .await?;
         Ok(())
@@ -157,8 +157,8 @@ impl<SPI: embedded_hal_async::spi::SpiDevice> A7105<SPI> {
         self.command(Command::ResetFifoWritePointer).await?;
         self.spi
             .transaction(&mut [
-                Operation::Write(&[Self::TX_BUFFER_ID]),
-                Operation::Write(buf),
+                embedded_hal_async::spi::Operation::Write(&[Self::TX_BUFFER_ID]),
+                embedded_hal_async::spi::Operation::Write(buf),
             ])
             .await
     }
