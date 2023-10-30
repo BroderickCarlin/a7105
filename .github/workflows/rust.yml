@@ -11,9 +11,7 @@ env:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: Build
@@ -22,19 +20,19 @@ jobs:
       run: cargo test --verbose
 
   lint: 
-
     runs-on: ubuntu-latest
-    
     steps:
+    - uses: actions/checkout@v3
     - name: Lint check
+      run: rustup component add clippy --toolchain nightly-2023-10-02-x86_64-unknown-linux-gnu
       run: cargo clippy
 
   formatting: 
-
     runs-on: ubuntu-latest
-
     steps:
+    - uses: actions/checkout@v3
     - name: Format check
+      run: rustup component add rustfmt --toolchain nightly-2023-10-02-x86_64-unknown-linux-gnu
       run: cargo fmt --all -- --check
 
 
