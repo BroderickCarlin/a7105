@@ -1,7 +1,6 @@
 #![no_std]
 
 use commands::{Command, Mode};
-use embedded_hal_async::spi::Operation;
 pub use error::*;
 use registers::{ReadableRegister, WritableRegister};
 
@@ -35,8 +34,8 @@ impl<SPI: embedded_hal::spi::SpiDevice> A7105<SPI> {
     pub fn read_reg<const N: usize, R: ReadableRegister<N>>(&mut self) -> Result<R, SPI::Error> {
         let mut buf = [0u8; N];
         self.spi.transaction(&mut [
-            Operation::Write(&[R::id() | READ_FLAG]),
-            Operation::Read(&mut buf),
+            embedded_hal::spi::Operation::Write(&[R::id() | Self::READ_FLAG]),
+            embedded_hal::spi::Operation::Read(&mut buf),
         ])?;
         Ok(R::from_slice(buf))
     }
@@ -44,8 +43,8 @@ impl<SPI: embedded_hal::spi::SpiDevice> A7105<SPI> {
     /// Writes a value to a regsiter, determined by the specified register type.
     pub fn write_reg<R: WritableRegister>(&mut self, reg: R) -> Result<(), SPI::Error> {
         self.spi.transaction(&mut [
-            Operation::Write(&[R::id()]),
-            Operation::Write(&reg.into_slice()),
+            embedded_hal::spi::Operation::Write(&[R::id()]),
+            embedded_hal::spi::Operation::Write(&reg.into_slice()),
         ])
     }
 
@@ -76,8 +75,8 @@ impl<SPI: embedded_hal::spi::SpiDevice> A7105<SPI> {
         // The packet was valid so reset the read pointer and do the actual read
         self.command(Command::ResetFifoReadPointer)?;
         self.spi.transaction(&mut [
-            Operation::Write(&[Self::RX_BUFFER_ID | READ_FLAG]),
-            Operation::Read(buf),
+            embedded_hal::spi::Operation::Write(&[Self::RX_BUFFER_ID | Self::READ_FLAG]),
+            embedded_hal::spi::Operation::Read(buf),
         ])?;
         Ok(())
     }
@@ -86,8 +85,8 @@ impl<SPI: embedded_hal::spi::SpiDevice> A7105<SPI> {
     pub fn tx_packet(&mut self, buf: &[u8]) -> Result<(), SPI::Error> {
         self.command(Command::ResetFifoWritePointer)?;
         self.spi.transaction(&mut [
-            Operation::Write(&[Self::TX_BUFFER_ID]),
-            Operation::Write(buf),
+            embedded_hal::spi::Operation::Write(&[Self::TX_BUFFER_ID]),
+            embedded_hal::spi::Operation::Write(buf),
         ])
     }
 }
@@ -101,8 +100,8 @@ impl<SPI: embedded_hal_async::spi::SpiDevice> A7105<SPI> {
         let mut buf = [0u8; N];
         self.spi
             .transaction(&mut [
-                Operation::Write(&[R::id() | Self::READ_FLAG]),
-                Operation::Read(&mut buf),
+                embedded_hal_async::spi::Operation::Write(&[R::id() | Self::READ_FLAG]),
+                embedded_hal_async::spi::Operation::Read(&mut buf),
             ])
             .await?;
         Ok(R::from_slice(buf))
@@ -112,8 +111,8 @@ impl<SPI: embedded_hal_async::spi::SpiDevice> A7105<SPI> {
     pub async fn write_reg<R: WritableRegister>(&mut self, reg: R) -> Result<(), SPI::Error> {
         self.spi
             .transaction(&mut [
-                Operation::Write(&[R::id()]),
-                Operation::Write(&reg.into_slice()),
+                embedded_hal_async::spi::Operation::Write(&[R::id()]),
+                embedded_hal_async::spi::Operation::Write(&reg.into_slice()),
             ])
             .await
     }
