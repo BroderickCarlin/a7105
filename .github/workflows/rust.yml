@@ -15,7 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build Async
-      run: cargo build --verbose --features = ["async"]
+      run: cargo build --verbose --features "async" --no-default-features
     - name: Build Blocking
       run: cargo build --verbose
     - name: Run tests
