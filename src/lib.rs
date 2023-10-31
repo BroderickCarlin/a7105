@@ -18,7 +18,7 @@ impl<SPI> A7105<SPI> {
     const READ_FLAG: u8 = 0x40;
 
     /// Constructs a new instance of a [`A7105`] from the provided [`SpiDevice`](embedded_hal::spi::SpiDevice)
-    pub fn new(spi: SPI) -> Self {
+    pub const fn new(spi: SPI) -> Self {
         Self { spi }
     }
 
