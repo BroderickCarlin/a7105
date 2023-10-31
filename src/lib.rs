@@ -41,7 +41,10 @@ impl<SPI: embedded_hal::spi::SpiDevice> A7105<SPI> {
     }
 
     /// Writes a value to a regsiter, determined by the specified register type.
-    pub fn write_reg<R: WritableRegister>(&mut self, reg: R) -> Result<(), SPI::Error> {
+    pub fn write_reg<const N: usize, R: WritableRegister<N>>(
+        &mut self,
+        reg: R,
+    ) -> Result<(), SPI::Error> {
         self.spi.transaction(&mut [
             embedded_hal::spi::Operation::Write(&[R::id()]),
             embedded_hal::spi::Operation::Write(&reg.into_slice()),
@@ -108,7 +111,10 @@ impl<SPI: embedded_hal_async::spi::SpiDevice> A7105<SPI> {
     }
 
     /// Writes a value to a regsiter, determined by the specified register type.
-    pub async fn write_reg<R: WritableRegister>(&mut self, reg: R) -> Result<(), SPI::Error> {
+    pub async fn write_reg<const N: usize, R: WritableRegister>(
+        &mut self,
+        reg: R,
+    ) -> Result<(), SPI::Error> {
         self.spi
             .transaction(&mut [
                 embedded_hal_async::spi::Operation::Write(&[R::id()]),
