@@ -13,7 +13,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Build Async
       run: cargo build --verbose --features "async" --no-default-features
     - name: Build Blocking
@@ -24,7 +24,7 @@ jobs:
   lint: 
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Install Nightly
       run: rustup toolchain install nightly-2023-10-02-x86_64-unknown-linux-gnu
     - name: Install Clippy
@@ -35,7 +35,7 @@ jobs:
   formatting: 
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Install Nightly
       run: rustup toolchain install nightly-2023-10-02-x86_64-unknown-linux-gnu
     - name: Install rustfmt
