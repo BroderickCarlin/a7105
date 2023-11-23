@@ -102,12 +102,12 @@ impl WritableRegister for Code2 {}
 impl From<Code2> for u8 {
     fn from(val: Code2) -> u8 {
         (val.demodulator_dc_estimation_average_mode & 0b111) << 4
-            | match val.id_error_code_tolerance {
+            | (match val.id_error_code_tolerance {
                 IdErrorCodeTolerance::Bits0 => 0,
-                IdErrorCodeTolerance::Bits1 => 0b0100,
-                IdErrorCodeTolerance::Bits2 => 0b1000,
-                IdErrorCodeTolerance::Bits3 => 0b1100,
-            }
+                IdErrorCodeTolerance::Bits1 => 0b01,
+                IdErrorCodeTolerance::Bits2 => 0b10,
+                IdErrorCodeTolerance::Bits3 => 0b11,
+            } << 2)
             | match val.preamble_pattern_detection_length {
                 PreabmelPatternDetectionLength::Bits0 => 0,
                 PreabmelPatternDetectionLength::Bits4 => 0b01,
