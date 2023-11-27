@@ -8,7 +8,7 @@ categories = [
 description = "Rust embedded-hal driver for the A7105 2.4GHz FSK/GFSK Transceiver"
 edition = "2021"
 keywords = [ "a7105", "2.4ghz", "gfsk", "afhds" ]
-license = "Apache-2.0"
+license = "MIT OR Apache-2.0"
 name = "a7105"
 readme = "README.md"
 repository = "https://github.com/BroderickCarlin/a7105"
@@ -21,6 +21,6 @@ embedded-hal-async = { version = "1.0.0-rc.1", optional = true }
 maybe-async = "0.2"
 
 [features]
-default = ["blocking"]
+default = ["async"]
 async = ["embedded-hal-async"] 
 blocking = ["embedded-hal", "maybe-async/is_sync"]

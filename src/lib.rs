@@ -1,5 +1,8 @@
 #![no_std]
 
+#[cfg(all(feature = "async", feature = "blocking"))]
+compile_error!("Both the 'blocking' and 'async' features are enabled. Did you forget to disable default features?");
+
 use commands::{Command, Mode};
 pub use error::*;
 use registers::{ReadableRegister, WritableRegister};
