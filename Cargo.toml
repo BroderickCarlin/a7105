@@ -18,8 +18,9 @@ version = "0.1.0"
 defmt = "0.3"
 embedded-hal = { version = "1.0.0-rc.1", optional = true }
 embedded-hal-async = { version = "1.0.0-rc.1", optional = true }
+maybe-async = "0.2"
 
 [features]
 default = ["blocking"]
 async = ["embedded-hal-async"] 
-blocking = ["embedded-hal"]
+blocking = ["embedded-hal", "maybe-async/is_sync"]
