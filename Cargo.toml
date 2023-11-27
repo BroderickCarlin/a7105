@@ -7,7 +7,7 @@ categories = [
 ]
 description = "Rust embedded-hal driver for the A7105 2.4GHz FSK/GFSK Transceiver"
 edition = "2021"
-keywords = [ "a7105", "2.4ghz", "gfsk", "afhds" ]
+keywords = [ "a7105", "2.4ghz", "gfsk", "afhds", "embedded-hal" ]
 license = "MIT OR Apache-2.0"
 name = "a7105"
 readme = "README.md"
