@@ -7,7 +7,7 @@
 //! mode that best fits their application requirements.
 //!
 //! This crate makes no assumptions for the protocol, if any, used on top of the a7105.
-//! Instead, the responsiblity of this crate end at configuring the radio and
+//! Instead, the responsibility of this crate end at configuring the radio and
 //! reading/writing raw bytes over the air.
 //!
 //! Sync and Async support is through [`embedded-hal`](https://crates.io/crates/embedded-hal)
