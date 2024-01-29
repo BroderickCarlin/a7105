@@ -12,7 +12,7 @@ license = "MIT OR Apache-2.0"
 name = "a7105"
 readme = "README.md"
 repository = "https://github.com/BroderickCarlin/a7105"
-version = "0.1.0"
+version = "0.1.1"
 
 [dependencies]
 defmt = "0.3"
